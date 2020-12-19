@@ -1,58 +1,43 @@
 #!/usr/bin/env bash
 
-# Install Homebrew (if not installed)
+#Check if Homebrew is installed
+which -s brew
+if [[ $? != 0 ]] ; then
+    # Install Homebrew
+    echo "Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+else
+    brew update
+fi
 
-# Make sure we’re using the latest Homebrew.
-brew update
 
-# Upgrade any already-installed formulae.
+#Upgrade installed formulae
 brew upgrade
 
-# Save Homebrew’s installed location.
+# Save Homebrew’s installed location
 BREW_PREFIX=$(brew --prefix)
 
-# Install and setup Mongodb
-# brew tap mongodb/brew
-# brew install mongodb-community
-# sudo mkdir -p /System/Volumes/Data/data/db
-# sudo chown -R `id -un` /System/Volumes/Data/data/db
+#Tools
+brew tap mongodb/brew
+brew install mongodb-community
 
-# Install GNU core utilities (those that come with macOS are outdated).
-# Don’t forget to add `$(brew --prefix coreutils)/libexec/gnubin` to `$PATH`.
-# brew install coreutils
-# ln -s "${BREW_PREFIX}/bin/gsha256sum" "${BREW_PREFIX}/bin/sha256sum"
-
-# Install some other useful utilities like `sponge`.
-# brew install moreutils
-# Install GNU `find`, `locate`, `updatedb`, and `xargs`, `g`-prefixed.
-# brew install findutils
-# Install GNU `sed` as gsed
-# brew install gnu-sed
-
-# Install `wget` with IRI support.
 brew install wget --with-iri
-
 brew install gmp
 brew install grep
 brew install node
 
-# Install useful binaries.
 brew install git
 brew install git-lfs
 brew install github/gh/gh
 
-#Install zsh
 brew install zsh
 
-# Installs Casks
-brew tap caskroom/cask
-
-## Apps
+#Apps
 brew install --cask dropbox
 brew install --cask firefox
-brew install --cask homebrew/cask-versions/firefox-nightly # Nightly
-#brew install --cask google-chrome #Chrome
-brew install --cask homebrew/cask-versions/google-chrome-canary # Chrome Canary
+brew install --cask homebrew/cask-versions/firefox-nightly
+brew install --cask google-chrome
+brew install --cask homebrew/cask-versions/google-chrome-canary
 brew install --cask iterm2
 brew install --cask notion
 brew install --cask spotify
