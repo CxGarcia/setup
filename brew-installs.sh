@@ -10,7 +10,6 @@ else
     brew update
 fi
 
-
 #Upgrade installed formulae
 brew upgrade
 
@@ -45,6 +44,7 @@ brew install --cask vlc
 brew install --cask tower
 brew install --cask visual-studio-code
 brew install --cask zoom
+brew install --cask slack
 
 # Remove outdated versions from the cellar.
 brew cleanup
