@@ -4,8 +4,7 @@
 which -s brew
 if [[ $? != 0 ]] ; then
     # Install Homebrew
-    echo "Installing Homebrew..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    echo 'Please install Homebrew by running the following command: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
 else
     brew update
 fi
@@ -44,6 +43,8 @@ brew install --cask vlc
 brew install --cask tower
 brew install --cask visual-studio-code
 brew install --cask zoom
+brew install --cask karabiner-elements
+brew install --cask discord
 brew install --cask slack
 
 # Remove outdated versions from the cellar.
