@@ -3,7 +3,13 @@ const fs = require('fs');
 const path = require('path');
 
 const args = process.argv.slice(2);
-const BASE_PATH = fs.existsSync('./src') ? path.join(__dirname, 'src') : '.';
+const cwd = process.cwd();
+
+const BASE_PATH = fs.existsSync('./src')
+  ? path.join(cwd, 'src', 'components')
+  : fs.existsSync('./components')
+  ? path.join(cwd, 'components')
+  : '.';
 
 for (const arg of args) {
   const [first, ...rest] = arg;
@@ -11,14 +17,24 @@ for (const arg of args) {
   const dir = path.join(BASE_PATH, componentName);
   const file = path.join(dir, componentName);
 
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+  //skip dir creation if it already exists
+  if (fs.existsSync(dir)) {
+    console.log(
+      `${componentName} already exists at: ${dir} - will skip its creation until the directory is deleted`
+    );
+
+    continue;
+  }
+
+  //create dir
+  fs.mkdirSync(dir);
 
   //create js file
   fs.appendFile(
     `${file}.js`,
     `
 import React from 'react';
-import styles from '${componentName}.module.scss';
+import styles from './${componentName}.module.scss';
 
 function ${componentName}({}) {
   return <div></div>;
@@ -28,7 +44,6 @@ export default ${componentName};
   `.trim(),
     function (err) {
       if (err) throw err;
-      console.log('js created!');
     }
   );
 
@@ -38,7 +53,6 @@ export default ${componentName};
     "@import 'styles/main.scss';",
     function (err) {
       if (err) throw err;
-      console.log('scss created!');
     }
   );
 
@@ -46,13 +60,14 @@ export default ${componentName};
   fs.appendFile(
     path.join(dir, 'index.js'),
     `
-import AlertStream from "./AlertStream";
+import ${componentName} from './${componentName}';
 
-export default AlertStream;
+export default ${componentName};
   `.trim(),
     function (err) {
       if (err) throw err;
-      console.log('Saved!');
     }
   );
+
+  console.log(`${componentName} has been created successfully at: ${dir}`);
 }
