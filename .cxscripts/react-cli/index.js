@@ -5,13 +5,16 @@ const path = require('path');
 const args = process.argv.slice(2);
 const cwd = process.cwd();
 
+//filter out flags from args array
+const filteredArgs = args.filter((arg) => !arg.startsWith('-'));
+
 const BASE_PATH = fs.existsSync('./src')
   ? path.join(cwd, 'src', 'components')
   : fs.existsSync('./components')
   ? path.join(cwd, 'components')
   : '.';
 
-for (const arg of args) {
+for (const arg of filteredArgs) {
   const [first, ...rest] = arg;
   const componentName = first.toUpperCase() + rest.join('');
   const dir = path.join(BASE_PATH, componentName);
@@ -55,6 +58,24 @@ export default ${componentName};
       if (err) throw err;
     }
   );
+
+  //test file
+  if (args.includes('-t')) {
+    fs.appendFile(
+      `${file}.test.js`,
+      `
+import { render, screen } from '@testing-library/react';
+import ${componentName} from './${componentName}';
+
+test('first test', () => {
+render(<${componentName} />);
+});
+      `.trim(),
+      function (err) {
+        if (err) throw err;
+      }
+    );
+  }
 
   //barrel roll
   fs.appendFile(
